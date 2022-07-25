@@ -1,24 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import AppBar from "@/components/appBar";
+import Route from "@/router";
+import { Box, CircularProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router";
+import "./App.css";
 
+const useStyle = makeStyles((theme) => ({
+  backdrop: {
+    minHeight: "100vh",
+    background: "#e5e5e5",
+  },
+  content: {
+    flexGrow: 1,
+ 
+  },
+  main: {
+    [theme.breakpoints.down("sm")]: {
+      padding: "15px 10px",
+    },
+  },
+  loading: {
+    width: "100%",
+    minHeight: "100vh",
+    background: "#E5E5E5",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+}));
 function App() {
+  const { pathname } = useLocation();
+  const classes = useStyle();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Suspense
+      fallback={
+        <Box className={classes.loading}>
+          <CircularProgress />
+        </Box>
+      }
+    >
+      <div className={clsx(classes.backdrop)}>
+        <AppBar />
+        <div className={classes.content}>
+          <div className={classes.toolbar} />
+          <div className={classes.main}>
+            <Route />
+          </div>
+        </div>
+      </div>
+    </React.Suspense>
   );
 }
 
